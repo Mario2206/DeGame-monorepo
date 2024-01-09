@@ -1,24 +1,17 @@
-import { ThirdwebNftMedia } from "@thirdweb-dev/react";
-import React from "react";
-import Container from "../../../components/Container/Container";
-import { GetStaticProps, GetStaticPaths } from "next";
-import { NFT_COLLECTION_ADDRESS } from "../../../const/contractAddresses";
-import styles from "../../../styles/Token.module.css";
-import { Toaster } from "react-hot-toast";
-import { NftGame } from "../../../util/types";
-import { getAllMintableNfts, hasGame } from "../../../util/wallet";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
-type Props = {
-  nft: NftGame;
-  contractMetadata: any;
-};
+import { Toaster } from "react-hot-toast";
+import Container from "../../../components/Container/Container";
+import { NftGame } from "../../../util/types";
+import { getAllMintableNfts } from "../../../util/wallet";
+import styles from "../../../styles/Token.module.css";
 
 interface StarRatingProps {
   rating: number;
   setRating: (rating: number) => void;
   editable: boolean;
 }
+
 const StarRating: React.FC<StarRatingProps> = ({
   rating,
   setRating,
@@ -43,29 +36,26 @@ export default function TokenPage() {
   const router = useRouter();
   const { tokenId } = router.query;
 
-  const [nft, setNft] = React.useState<NftGame | undefined>(undefined);
-  const [comment, setComment] = React.useState("");
-  const [rating, setRating] = React.useState(0);
-  const [hasSubmitted, setHasSubmitted] = React.useState(false);
+  const [nft, setNft] = useState<NftGame | undefined>(undefined);
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const handleCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Comment:", comment, "Rating:", rating);
+    setHasSubmitted(true); 
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getAllMintableNfts().then(async (nfts) => {
-      const nft = nfts.find((nft) => nft.id === Number(tokenId));
-      if (!nft) return;
-
-      if (await hasGame(nft.id)) {
-        setNft(nft);
-        console.log(nft);
-        return;
+      const game = nfts.find((game) => game.id === Number(tokenId));
+      if (game) {
+        setNft(game);
+      } else {
+        router.push("/games");
       }
-      router.push("/games");
     });
-  }, [tokenId]);
+  }, [tokenId, router]);
 
   if (!nft) {
     return <p>Loading...</p>;
@@ -81,9 +71,7 @@ export default function TokenPage() {
               <span>Play to</span>
               <h1 className={styles.gameTitle}>{nft.name}</h1>
             </div>
-
             <img src={nft.image} alt={nft.name} className={styles.gameImage} />
-
             <div>
               <form
                 onSubmit={handleCommentSubmit}
