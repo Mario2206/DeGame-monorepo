@@ -12,17 +12,17 @@ yarn install
 
 2. Compile smart contracts
 ```
-npx hardhat compile
+yarn compile
 ```
 
 3. Start the local hardhat network
 ```
-npx hardhat node
+yarn start-node
 ```
 
 4. Deploy your contracts on local network
 ```
-npx hardhat run scripts/deploy.ts
+yarn deploy
 ```
 
 5. Start the front-end app
@@ -33,8 +33,14 @@ yarn dev
 
 ## How to connect your wallet to the local network?
 
-With metamask: https://docs.metamask.io/wallet/how-to/get-started-building/run-devnet/
+### With metamask
 
-## How to deploy the smart contracts to real network? 
+Go to `Add Network` > `Add network manually` and input the following form:
+
+![metamask add network](./images/metamask-network.png)
+
+You can have more info [here](https://docs.metamask.io/wallet/how-to/get-started-building/run-devnet/).
+
+## How to deploy the smart contracts to a real network? 
 
 TODO 
