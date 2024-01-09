@@ -1,0 +1,69 @@
+.commentsContainer {
+  background-color: #1A1C1F;
+  padding: 10px;
+  margin: 0 0 25px 0;
+  border-radius: 10px;
+  width: 100%;
+  color: #eaeaea;
+}
+
+.comment {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  border: 1px solid #555555;
+}
+
+.comment img {
+  border-radius: 50%;
+  margin-right: 10px;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.comment div {
+  flex-grow: 1;
+}
+
+.comment h4 {
+  margin: 0 0 0 0;
+  font-size: .9rem;
+  color: #cccccc;
+}
+.gamenameRatingContainer {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+.starRating {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  line-height: 30%;
+}
+.starRating span {
+  margin-top: unset!important;
+  font-size: 1rem!important;
+}
+.starRating span.yellow {
+  color: #ffd700 !important;
+}
+
+.comment p {
+  margin: 0;
+  color: #b8b8b8;
+  font-size: 1.1rem;
+}
+
+.comment span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #999;
+}
