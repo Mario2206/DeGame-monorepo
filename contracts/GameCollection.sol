@@ -5,9 +5,10 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./BadgeCaller.sol";
 
 /// @custom:security-contact <security email address>
-contract GameCollection is ERC1155, IERC2981, Ownable {
+contract GameCollection is ERC1155, IERC2981, Ownable, BadgeCaller {
     using Strings for uint256;
 
     uint256 public idCounter;
