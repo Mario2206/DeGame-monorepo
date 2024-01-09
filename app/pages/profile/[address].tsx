@@ -1,14 +1,10 @@
-import {
-  useContract,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react";
+import { useContract, useOwnedNFTs } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Container from "../../components/Container/Container";
 import Skeleton from "../../components/Skeleton/Skeleton";
-import {
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses";
+import { Comments } from "../../components/Comments/Comments";
+import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
 import styles from "../../styles/Profile.module.css";
 import randomColor from "../../util/randomColor";
 
@@ -21,7 +17,9 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [tab, setTab] = useState<"nfts" | "listings" | "auctions">("nfts");
+  const [tab, setTab] = useState<"nfts" | "listings" | "auctions" | "comments">(
+    "nfts"
+  );
 
   const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
 
@@ -78,6 +76,14 @@ export default function ProfilePage() {
         >
           Auctions
         </h3>
+
+        <h3
+          className={`${styles.tab}
+        ${tab === "comments" ? styles.activeTab : ""}`}
+          onClick={() => setTab("comments")}
+        >
+          Comments
+        </h3>
       </div>
 
       <div
@@ -96,14 +102,20 @@ export default function ProfilePage() {
         className={`${
           tab === "listings" ? styles.activeTabContent : styles.tabContent
         }`}
-      >
-      </div>
+      ></div>
 
       <div
         className={`${
           tab === "auctions" ? styles.activeTabContent : styles.tabContent
         }`}
+      ></div>
+
+      <div
+        className={`${
+          tab === "comments" ? styles.activeTabContent : styles.tabContent
+        }`}
       >
+        <Comments />
       </div>
     </Container>
   );

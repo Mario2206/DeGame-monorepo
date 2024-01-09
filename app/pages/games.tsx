@@ -26,7 +26,7 @@ export default function Buy() {
 				data={nfts}
 				isLoading={isLoading}
 				emptyText={
-					"No games found"
+					"No games found, we think you should be connecting your wallet."
 				}
 			/>
 		</Container>
