@@ -1,9 +1,8 @@
 import { ethers } from "ethers";
-import type { NFT as NFTType } from "@thirdweb-dev/sdk";
-import { NFT_COLLECTION_ADDRESS } from "../const/contractAddresses";
-import { NftGame } from "./types";
+import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
+import { NftGame } from "../types";
 
-const abi = [
+const GAME_COLLECTION_ABI = [
 	{
 		inputs: [],
 		stateMutability: "nonpayable",
@@ -721,19 +720,19 @@ const abi = [
 	},
 ];
 
-export function getContract() {
+export function getGameCollectionContract() {
 	const provider = new ethers.providers.Web3Provider(window.ethereum);
 	const signer = provider.getSigner();
 	const contract = ethers.ContractFactory.getContract(
 		NFT_COLLECTION_ADDRESS,
-		abi,
+		GAME_COLLECTION_ABI,
 		signer
 	);
 	return { contract, signer };
 }
 
 export async function mintNft(gameId: number, price: string) {
-	const { contract } = getContract();
+	const { contract } = getGameCollectionContract();
 	const gamePrice = ethers.utils.parseEther(price);
 	console.log({ gamePrice });
 	const res = await contract["mint(uint256)"](gameId, {
@@ -744,14 +743,14 @@ export async function mintNft(gameId: number, price: string) {
 }
 
 export async function hasGame(tokenId: number) {
-	const { contract, signer } = getContract();
+	const { contract, signer } = getGameCollectionContract();
 	const res = await contract.balanceOf(await signer.getAddress(), tokenId);
 	const value = Number(res);
 	return value > 0;
 }
 
 export async function getAllMintableNfts() {
-	const { contract } = getContract();
+	const { contract } = getGameCollectionContract();
 	const events = await contract.queryFilter("RegisterGame");
 	const nfts = await Promise.all(events.map<Promise<NftGame>>(async (event) => {
 		const metadataUri = await contract.uri(event.args?.gameId.toNumber() ?? 0);

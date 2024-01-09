@@ -22,7 +22,7 @@ contract GameCollection is ERC1155, IERC2981, Ownable, BadgeCaller {
     event Minted(uint256 indexed gameId, address indexed to);
 
 
-    constructor() ERC1155("") Ownable(msg.sender) {
+    constructor() ERC1155("") BadgeCaller() {
         metadataURI = "https://scarlet-late-turtle-674.mypinata.cloud/ipfs/QmRq9JkTQjn9jzVm8un3UQwUqMo6U18hZQKxLJszVnufuQ/";
     }
     
@@ -43,6 +43,8 @@ contract GameCollection is ERC1155, IERC2981, Ownable, BadgeCaller {
       require(msg.value >= gamePrice, "Invalid price");
       _mint(msg.sender, gameId, 1, "");
       emit Minted(gameId, msg.sender);
+      // Assign the badge to the user
+      assignBadge(msg.sender, 1);
     }
 
     // Withdraw the funds
