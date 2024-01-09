@@ -42,24 +42,12 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    // mintNft();
-    // hasGame();
     getAllMintableNfts()
-      .then((nfts) => {
-        setNfts(nfts);
-      })
+      .then((nfts) => getOwnedNfts(nfts).then((data) => setOwnedNfts(data)))
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    getOwnedNfts(nfts).then((data) => {
-      setOwnedNfts(data);
-    });
-  }, [nfts]);
-
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
 
   return (
     <Container maxWidth="lg">
