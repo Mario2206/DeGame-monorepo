@@ -24,6 +24,8 @@ async function main() {
 
   await gameComments.waitForDeployment();
 
+  await gameComments.addComment('Test comment');
+
   console.log(
     `Contract ${CONTRACT.GAME_COMMENTS} deployed to ${gameComments.target}`
   );

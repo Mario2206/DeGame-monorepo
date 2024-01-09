@@ -22,7 +22,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const [tab, setTab] = useState<'games' | 'comments'>('games');
   const [isLoading, setIsLoading] = useState(true);
-  const [nfts, setNfts] = useState<NftGame[]>([]);
   const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
 
   const checkIfOwned = async (nft: NftGame) => {

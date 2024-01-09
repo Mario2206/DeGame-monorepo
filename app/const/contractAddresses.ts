@@ -9,4 +9,6 @@ const LocalhostNetwork = { ...Localhost, chainId: 31337 };
 export const NETWORK = Sepolia;
 
 // 3. The address of your NFT collection smart contract.
-export const NFT_COLLECTION_ADDRESS = process.env.CONTRACT_ADDRESS;
+export const NFT_COLLECTION_ADDRESS = process.env.NFT_CONTRACT_ADDRESS;
+export const COMMENTS_COLLECTION_ADDRESS =
+  process.env.COMMENTS_CONTRACT_ADDRESS;

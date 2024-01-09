@@ -1,67 +1,42 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
-
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/interfaces/IERC2981.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+pragma solidity ^0.8.0;
 
 /// @custom:security-contact <security email address>
-contract GameComments is ERC1155, IERC2981, Ownable {
-    using Strings for uint256;
-
+contract GameComments {
     struct Comment {
-        uint256 gameId;
+        uint256 id;
         address author;
         string content;
         uint256 timestamp;
     }
 
+    uint256 public idCounter;
+
     mapping(uint256 => Comment) public comments;
 
-    event CommentAdded(
-        uint256 gameId,
-        address indexed author,
-        uint256 indexed commentId
-    );
+    event CommentAdded(address indexed author, uint256 indexed commentId);
 
-    uint256 public commentCount;
+    function addComment(string memory _content) public returns (uint256) {
+        require(bytes(_content).length > 0, "Comment content cannot be empty.");
+        idCounter++;
 
-    function addComment(string memory _content, uint256 _gameId) public {
-        require(bytes(_content).length > 0, "Comment can't be empty.");
-
-        comments[commentCount] = Comment(
+        comments[idCounter] = Comment(
+            idCounter,
             msg.sender,
             _content,
-            block.timestamp,
-            _gameId
+            block.timestamp
         );
-        emit CommentAdded(msg.sender, commentCount, _gameId);
+        emit CommentAdded(msg.sender, idCounter);
 
-        commentCount++;
+        return idCounter;
     }
 
     function getComment(
         uint256 _commentId
-    ) public view returns (address, string memory, uint256, uint256) {
-        require(_commentId < commentCount, "Comment doesn't exist.");
+    ) public view returns (uint256, address, string memory, uint256) {
+        require(_commentId < idCounter, "This comment does not exist.");
 
         Comment storage comment = comments[_commentId];
-        return (
-            comment.gameId,
-            comment.author,
-            comment.content,
-            comment.timestamp
-        );
-    }
-
-    function deleteComment(uint256 _commentId) public {
-        require(_commentId < commentCount, "Comment doesn't exist.");
-        require(
-            comments[_commentId].author == msg.sender,
-            "You are not the owner of this comment."
-        );
-
-        delete comments[_commentId];
+        return (comment.id, comment.author, comment.content, comment.timestamp);
     }
 }
