@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract BadgeManager is ERC1155, Ownable {
     uint256 public idCounter;
     mapping(uint256 => bool) public badges;
+    mapping(address => uint256[]) public badgesByOwner;
 
     string public metadataURI;
     mapping(address => bool) public allowedAddresses;
@@ -42,7 +43,12 @@ contract BadgeManager is ERC1155, Ownable {
         if (balanceOf(to, badgeId) == 0) {
             _mint(msg.sender, badgeId, 1, "");
             emit BadgeMinted(badgeId, msg.sender);
+            badgesByOwner[to].push(badgeId);
         }
+    }
+
+    function getMyBadges() public view returns (uint256[] memory) {
+        return badgesByOwner[msg.sender];
     }
 
     function setAllowedContract(
