@@ -1,16 +1,15 @@
-import {
-  useContract,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
-import Container from "../../components/Container/Container";
-import Skeleton from "../../components/Skeleton/Skeleton";
-import {
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses";
-import styles from "../../styles/Profile.module.css";
-import randomColor from "../../util/randomColor";
+import { useContract } from '@thirdweb-dev/react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import Container from '../../components/Container/Container';
+import NFTGrid from '../../components/NFT/NFTGrid';
+import Skeleton from '../../components/Skeleton/Skeleton';
+import { NFT_COLLECTION_ADDRESS } from '../../const/contractAddresses';
+import styles from '../../styles/Profile.module.css';
+import randomColor from '../../util/randomColor';
+import { NftGame } from '../../util/types';
+import { getAllMintableNfts, hasGame } from '../../util/wallet';
+import { Comments } from '../../components/Comments/Comments';
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -21,14 +20,34 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [tab, setTab] = useState<"nfts" | "listings" | "auctions">("nfts");
+  const [tab, setTab] = useState<'games' | 'comments'>('games');
+  const [isLoading, setIsLoading] = useState(true);
+  const [nfts, setNfts] = useState<NftGame[]>([]);
+  const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
 
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
+  const checkIfOwned = async (nft: NftGame) => {
+    const owned = await hasGame(nft.id);
+    return owned;
+  };
 
-  const { data: ownedNfts, isLoading: loadingOwnedNfts } = useOwnedNFTs(
-    nftCollection,
-    router.query.address as string
-  );
+  const getOwnedNfts = async (nfts: NftGame[]) => {
+    const array = [];
+    for (let i = 0; i < nfts.length; i++) {
+      const nft = nfts[i];
+      const isOwned = await checkIfOwned(nft);
+      if (isOwned) array.push(nft);
+    }
+
+    return array;
+  };
+
+  useEffect(() => {
+    getAllMintableNfts()
+      .then((nfts) => getOwnedNfts(nfts).then((data) => setOwnedNfts(data)))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <Container maxWidth="lg">
@@ -48,7 +67,7 @@ export default function ProfilePage() {
         <h1 className={styles.profileName}>
           {router.query.address ? (
             router.query.address.toString().substring(0, 4) +
-            "..." +
+            '...' +
             router.query.address.toString().substring(38, 42)
           ) : (
             <Skeleton width="320" />
@@ -59,51 +78,40 @@ export default function ProfilePage() {
       <div className={styles.tabs}>
         <h3
           className={`${styles.tab} 
-        ${tab === "nfts" ? styles.activeTab : ""}`}
-          onClick={() => setTab("nfts")}
+        ${tab === 'games' ? styles.activeTab : ''}`}
+          onClick={() => setTab('games')}
         >
-          NFTs
+          Games
         </h3>
-        <h3
-          className={`${styles.tab} 
-        ${tab === "listings" ? styles.activeTab : ""}`}
-          onClick={() => setTab("listings")}
-        >
-          Listings
-        </h3>
+
         <h3
           className={`${styles.tab}
-        ${tab === "auctions" ? styles.activeTab : ""}`}
-          onClick={() => setTab("auctions")}
+        ${tab === 'comments' ? styles.activeTab : ''}`}
+          onClick={() => setTab('comments')}
         >
-          Auctions
+          Comments
         </h3>
       </div>
 
       <div
         className={`${
-          tab === "nfts" ? styles.activeTabContent : styles.tabContent
+          tab === 'games' ? styles.activeTabContent : styles.tabContent
         }`}
       >
-        {/* <NFTGrid
+        <NFTGrid
           data={ownedNfts}
-          isLoading={loadingOwnedNfts}
-          emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
-        /> */}
+          isLoading={isLoading}
+          emptyText={'No games found'}
+          displayPrice={false}
+        />
       </div>
 
       <div
         className={`${
-          tab === "listings" ? styles.activeTabContent : styles.tabContent
+          tab === 'comments' ? styles.activeTabContent : styles.tabContent
         }`}
       >
-      </div>
-
-      <div
-        className={`${
-          tab === "auctions" ? styles.activeTabContent : styles.tabContent
-        }`}
-      >
+        <Comments />
       </div>
     </Container>
   );
