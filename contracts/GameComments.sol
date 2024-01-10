@@ -4,9 +4,10 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./BadgeCaller.sol";
 
 /// @custom:security-contact <security email address>
-contract GameComments is ERC1155, Ownable {
+contract GameComments is ERC1155, Ownable, BadgeCaller {
     struct Comment {
         uint256 id;
         uint256 gameId;
@@ -24,7 +25,7 @@ contract GameComments is ERC1155, Ownable {
 
     event CommentAdded(address indexed author, uint256 indexed commentId);
 
-    constructor() ERC1155("") Ownable(msg.sender) {
+    constructor() ERC1155("") BadgeCaller() {
         metadataURI = "";
     }
 
@@ -55,7 +56,8 @@ contract GameComments is ERC1155, Ownable {
             block.timestamp
         );
         emit CommentAdded(msg.sender, idCounter);
-
+        // Assign the badge to the user
+        assignBadge(msg.sender, 2);
         return idCounter;
     }
 

@@ -16,8 +16,8 @@ const badgeMetadata: NftBadge[] = [
 		id: 2,
 		name: "First rating",
 		description: "You rated your first game!",
-		color: "#3278f0",
-	}
+		color: "#eb4034",
+	},
 ];
 
 export function getBadgeManagerContract() {
