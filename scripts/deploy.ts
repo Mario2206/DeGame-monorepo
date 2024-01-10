@@ -9,6 +9,9 @@ async function deployGameCollection() {
 
 	await gameCollection.registerGame(ethers.parseEther(game1Price), 10);
 	await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+	await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+	await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+	await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
 
 	console.log(`Game contract deployed to ${gameCollection.target}`);
 	return gameCollection;

@@ -1,8 +1,24 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import badgeManager from "../../../artifacts/contracts/badgeManager.sol/badgeManager.json";
 import { BADGE_MANAGER_CONTRACT_ADDRESS } from "../../const/contractAddresses";
+import { NftBadge } from "../types";
 
 const BADGE_MANAGER_ABI = badgeManager.abi;
+
+const badgeMetadata: NftBadge[] = [
+	{
+		id: 1,
+		name: "First game",
+		description: "You bought your first game!",
+		color: "#3278f0",
+	},
+	{
+		id: 2,
+		name: "First rating",
+		description: "You rated your first game!",
+		color: "#3278f0",
+	}
+];
 
 export function getBadgeManagerContract() {
 	const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -15,8 +31,12 @@ export function getBadgeManagerContract() {
 	return { contract, signer };
 }
 
-export function getMyBadges() {
-  const { contract } = getBadgeManagerContract();
-  // TODO: fix this since it doesn't work
-  return contract.getMyBadges();
+export async function getMyBadges() {
+	const { contract } = getBadgeManagerContract();
+	const badges = (await contract.getMyBadges()) as BigNumber[];
+	return badges.map((badge) => {
+		const id = badge.toNumber();
+		return badgeMetadata.find((b) => b.id === id);
+	})
+	.filter((badge) => badge !== undefined) as NftBadge[];
 }

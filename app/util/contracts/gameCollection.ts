@@ -19,15 +19,15 @@ export function getGameCollectionContract() {
 export async function mintNft(gameId: number, price: string) {
 	const { contract } = getGameCollectionContract();
 	const gamePrice = ethers.utils.parseEther(price);
-	console.log({ gamePrice });
 	const res = await contract["mint(uint256)"](gameId, {
 		value: gamePrice,
-		gasLimit: 100000,
+		gasLimit: 1000000,
 	});
 	console.log({ res, value: res.value.toString() });
 }
 
 export async function hasGame(tokenId: number) {
+	console.log("hasGame", tokenId);
 	const { contract, signer } = getGameCollectionContract();
 	const res = await contract.balanceOf(await signer.getAddress(), tokenId);
 	const value = Number(res);

@@ -6,7 +6,7 @@ import NFTGrid from "../../components/NFT/NFTGrid";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import styles from "../../styles/Profile.module.css";
 import randomColor from "../../util/randomColor";
-import { NftGame } from "../../util/types";
+import { NftBadge, NftGame } from "../../util/types";
 import { Comments } from "../../components/Comments/Comments";
 import {
 	getAllMintableNfts,
@@ -15,6 +15,8 @@ import {
 } from "../../util/contracts/gameCollection";
 import { makeFirstLetterUppercase } from "../../util/text";
 import { getMyBadges } from "../../util/contracts/badgeManager";
+import { Badge } from "../../components/Badge/Badge";
+import { BadgeList } from "../../components/Badge/BadgeList";
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
 	randomColor(),
@@ -32,6 +34,7 @@ export default function ProfilePage() {
 	);
 	const [isLoading, setIsLoading] = useState(true);
 	const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
+	const [myBadges, setMyBadges] = useState<NftBadge[]>([]);
 
 	useEffect(() => {
 		getAllMintableNfts()
@@ -44,6 +47,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     getMyBadges()
+		.then(data => {
+			console.log({data})
+			setMyBadges(data)
+		})
   }, [])
 
 	return (
@@ -104,6 +111,13 @@ export default function ProfilePage() {
 				}`}
 			>
 				<Comments />
+			</div>
+			<div
+				className={`${
+					activeTab === "badges" ? styles.activeTabContent : styles.tabContent
+				}`}
+			>
+				<BadgeList badges={myBadges} />
 			</div>
 		</Container>
 	);

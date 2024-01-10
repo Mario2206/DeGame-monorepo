@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.2;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 import "./BadgeManager.sol";
 
@@ -15,6 +16,6 @@ abstract contract BadgeCaller is Ownable {
   
    function assignBadge(address to, uint256 badgeId) internal {
         require(badgeManager != address(0), "BadgeManager not set");
-        BadgeManager(badgeManager).assign(to, badgeId);
+        return BadgeManager(badgeManager).assign(to, badgeId);
     }
 }

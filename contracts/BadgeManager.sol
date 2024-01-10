@@ -4,6 +4,7 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "hardhat/console.sol";
 
 // TODO: Implement soul bound token
 contract BadgeManager is ERC1155, Ownable {
@@ -31,7 +32,7 @@ contract BadgeManager is ERC1155, Ownable {
     }
 
     // Mint and assign the badge to an address
-    function assign(address to, uint256 badgeId) public payable {
+    function assign(address to, uint256 badgeId) public {
         require(badges[badgeId], "Invalid badge id");
         // Only the allowed contracts can mint
         require(
@@ -41,8 +42,8 @@ contract BadgeManager is ERC1155, Ownable {
 
         // Only one badge per address
         if (balanceOf(to, badgeId) == 0) {
-            _mint(msg.sender, badgeId, 1, "");
-            emit BadgeMinted(badgeId, msg.sender);
+            _mint(to, badgeId, 1, "");
+            emit BadgeMinted(badgeId, to);
             badgesByOwner[to].push(badgeId);
         }
     }
