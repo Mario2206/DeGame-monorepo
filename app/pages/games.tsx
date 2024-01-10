@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
 import NFTGrid from '../components/NFT/NFTGrid';
-import { getAllMintableNfts } from '../util/wallet';
 import { NftGame } from '../util/types';
+import { getAllMintableNfts } from '../util/contracts/gameCollection';
 
 export default function Buy() {
   const [isLoading, setIsLoading] = useState(true);

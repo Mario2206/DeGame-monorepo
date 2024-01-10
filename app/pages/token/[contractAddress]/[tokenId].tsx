@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
 import Container from "../../../components/Container/Container";
 import { NftGame } from "../../../util/types";
-import { getAllMintableNfts } from "../../../util/wallet";
 import styles from "../../../styles/Token.module.css";
+import { getAllMintableNfts } from "../../../util/contracts/gameCollection";
 
 interface StarRatingProps {
   rating: number;

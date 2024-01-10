@@ -9,3 +9,10 @@ export type NftGame = {
   price: string;
 	contract: string;
 };
+
+export type NftBadge = {
+	id: number;
+	name: string;
+	description: string;
+	color: string;
+}
