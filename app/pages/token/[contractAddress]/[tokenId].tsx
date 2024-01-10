@@ -52,7 +52,9 @@ export default function TokenPage() {
       if (game) {
         setNft(game);
       } else {
-        router.push("/games");
+				setTimeout(() => {
+					router.push("/games");
+				}, 0);
       }
     });
   }, [tokenId, router]);

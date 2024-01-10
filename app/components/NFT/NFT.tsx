@@ -35,7 +35,6 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
   useEffect(() => {
     const { contract } = getGameCollectionContract();
     const onMinted = (event: Event) => {
-      console.log({ event });
       checkIfPlayable();
       setIsLoading(false);
     };
