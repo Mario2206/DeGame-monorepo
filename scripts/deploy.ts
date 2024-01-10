@@ -24,7 +24,8 @@ async function deployBadgeManager() {
   const badgeManager = await ethers.deployContract('BadgeManager');
   await badgeManager.waitForDeployment();
 
-  await badgeManager.registerBadge();
+  await badgeManager.registerBadge(); // First game bought
+  await badgeManager.registerBadge(); // First comment created
 
   console.log(`BadgeManager contract deployed to ${badgeManager.target}`);
   return badgeManager;
@@ -47,9 +48,11 @@ async function main() {
 
   // Allow the GameCollection contract to mint badges
   await badgeManager.setAllowedContract(gameCollection.target, true);
+  await badgeManager.setAllowedContract(commentsManager.target, true);
 
-  // Set the BadgeManager contract on the GameCollection contract so it can interact with the deployed BadgeManager
+  // Set the BadgeManager contract on the contracts s
   await gameCollection.setBadgeManager(badgeManager.target);
+  await commentsManager.setBadgeManager(badgeManager.target);
 }
 
 main().catch((error) => {
