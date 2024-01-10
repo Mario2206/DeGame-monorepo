@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import styles from './NFT.module.css';
 import { NftGame } from '../../util/types';
 import { hasGame, mintNft } from '../../util/contracts/gameCollection';
@@ -18,7 +18,7 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
     setPlayable(playable);
   };
 
-  const onClick = async () => {
+  const onClick: MouseEventHandler = async (e) => {
     if (!playable) {
       setIsLoading(true);
       await mintNft(nft.id, nft.price)

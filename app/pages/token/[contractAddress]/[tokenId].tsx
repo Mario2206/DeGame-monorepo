@@ -84,7 +84,6 @@ export default function TokenPage() {
 
   return (
     <>
-      <Toaster position="bottom-center" reverseOrder={false} />
       <Container maxWidth="lg">
         <div className={styles.container}>
           <div className={styles.containerGame}>
