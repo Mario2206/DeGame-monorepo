@@ -16,8 +16,8 @@ const badgeMetadata: NftBadge[] = [
 		id: 2,
 		name: "First rating",
 		description: "You rated your first game!",
-		color: "#3278f0",
-	}
+		color: "#eb4034",
+	},
 ];
 
 export function getBadgeManagerContract() {
@@ -39,4 +39,9 @@ export async function getMyBadges() {
 		return badgeMetadata.find((b) => b.id === id);
 	})
 	.filter((badge) => badge !== undefined) as NftBadge[];
+}
+
+
+export const getBadgeMetadata = (id: number) => {
+	return badgeMetadata.find((badge) => badge.id == id);
 }
