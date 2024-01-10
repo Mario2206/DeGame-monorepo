@@ -5,18 +5,18 @@ import Container from '../../../components/Container/Container';
 import { NftGame } from '../../../util/types';
 import styles from '../../../styles/Token.module.css';
 import { getAllMintableNfts } from '../../../util/contracts/gameCollection';
+import { CommentForm } from '../../../components/CommentForm/CommentForm';
 import {
   addComment,
   hasGameComment,
 } from '../../../util/contracts/gameComments';
 
-interface StarRatingProps {
+export interface StarRatingProps {
   rating: number;
   setRating: (rating: number) => void;
   editable: boolean;
 }
-
-const StarRating: React.FC<StarRatingProps> = ({
+export const StarRating: React.FC<StarRatingProps> = ({
   rating,
   setRating,
   editable,
@@ -97,36 +97,16 @@ export default function TokenPage() {
               <p>Comment already submitted</p>
             ) : (
               <div>
-                <form
-                  onSubmit={handleCommentSubmit}
-                  className={styles.commentForm}
-                >
-                  <StarRating
-                    rating={rating}
-                    setRating={setRating}
-                    editable={!hasSubmitted}
-                  />
-                  <textarea
-                    className={styles.commentTextarea}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Write your comment here..."
-                    rows={4}
-                    disabled={hasSubmitted}
-                  />
-                  {error && <p>Transaction error...</p>}
-                  <button
-                    className={styles.submitButton}
-                    type="submit"
-                    disabled={hasSubmitted || loading}
-                  >
-                    {loading
-                      ? 'Loading...'
-                      : hasSubmitted
-                      ? 'Submitted'
-                      : 'Submit Comment'}
-                  </button>
-                </form>
+                <CommentForm
+                  setComment={setComment}
+                  comment={comment}
+                  setRating={setRating}
+                  rating={rating}
+                  handleCommentSubmit={handleCommentSubmit}
+                  editable={!hasSubmitted}
+                  loading={loading}
+                  error={error}
+                />
               </div>
             )}
           </div>

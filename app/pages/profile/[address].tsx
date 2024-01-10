@@ -61,7 +61,6 @@ export default function ProfilePage() {
     });
 
     getMyBadges().then((data) => {
-      console.log({ data });
       setMyBadges(data);
     });
   }, []);

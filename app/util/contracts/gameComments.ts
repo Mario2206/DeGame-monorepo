@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import gameComments from '../../../artifacts/contracts/gameComments.sol/gameComments.json';
 import { COMMENTS_CONTRACT_ADDRESS } from '../../const/contractAddresses';
 import { Comment } from '../types';
-import { getAllMintableNfts } from './gameCollection';
+import { getAllMintableNfts, getGameById } from './gameCollection';
 
 const BADGE_MANAGER_ABI = gameComments.abi;
 
@@ -33,6 +33,33 @@ export async function getOwnedComments() {
     const nft = nfts.find((nft) => nft.id === gameId);
 
     if (!nft) continue;
+
+    comments.push({
+      id: obj[0].toNumber(),
+      game: nft,
+      rating: obj[2],
+      author: obj[3],
+      content: obj[4],
+      timestamp: obj[5].toNumber(),
+    });
+  }
+
+  return comments;
+}
+
+export async function getGameComments(gameId: number) {
+  const { contract } = getGameCommentsContract();
+
+  const result = await contract.getAllGamesComments(gameId);
+
+  const comments: Comment[] = [];
+
+  const nft = await getGameById(gameId);
+
+  if (!nft) return [];
+
+  for (let i = 0; i < result.length; i++) {
+    const obj = result[i];
 
     comments.push({
       id: obj[0].toNumber(),

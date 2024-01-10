@@ -109,4 +109,25 @@ contract GameComments is ERC1155, Ownable {
 
         return ownerComments;
     }
+
+    function getAllGamesComments(
+        uint256 _gameId
+    ) public view returns (Comment[] memory) {
+        Comment[] memory allComments = getAllComments();
+        Comment[] memory gameComments = new Comment[](allComments.length);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < allComments.length; i++) {
+            if (allComments[i].gameId == _gameId) {
+                gameComments[count] = allComments[i];
+                count++;
+            }
+        }
+
+        assembly {
+            mstore(gameComments, count)
+        }
+
+        return gameComments;
+    }
 }

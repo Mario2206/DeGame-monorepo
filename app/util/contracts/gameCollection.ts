@@ -23,11 +23,10 @@ export async function mintNft(gameId: number, price: string) {
     value: gamePrice,
     gasLimit: 1000000,
   });
-  console.log({ res, value: res.value.toString() });
+  await res.wait();
 }
 
 export async function hasGame(tokenId: number) {
-  console.log('hasGame', tokenId);
   const { contract, signer } = getGameCollectionContract();
   const res = await contract.balanceOf(await signer.getAddress(), tokenId);
   const value = Number(res);
@@ -75,3 +74,14 @@ export const getOwnedNfts = async (nfts: NftGame[]) => {
 
   return array;
 };
+
+export async function getGameById(
+  gameId: number | string
+): Promise<NftGame | null> {
+  return getAllMintableNfts().then(async (nfts) => {
+    const game = nfts.find((game) => game.id === Number(gameId));
+    if (game) {
+      return game;
+    } else return null;
+  });
+}

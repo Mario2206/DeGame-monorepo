@@ -1,11 +1,12 @@
+import React, { useState } from 'react';
 import { getTimeAgo } from '../../util/time';
 import styles from './Comments.module.css';
 
 const exampleComments = [
   {
     id: 1,
-    gameName: "Tom Clancy's Rainbow Six Siege",
-    imgGame:
+    commentName: "Tom Clancy's Rainbow Six Siege",
+    commentImg:
       'https://cdn1.epicgames.com/offer/carnation/Share_Image_1920x1080-3_1920x1080-6e2d079f24db0a35285007191358978b',
     comment: 'This game is awesome',
     gameRating: 4.5,
@@ -13,8 +14,8 @@ const exampleComments = [
   },
   {
     id: 2,
-    gameName: 'Avatar: Frontiers of Pandora',
-    imgGame:
+    commentName: 'Avatar: Frontiers of Pandora',
+    commentImg:
       'https://cdn-uploads.gameblog.fr/img/news/428100_648873239f3dc.jpg?ver=1',
     comment: 'I love playing this game!',
     gameRating: 5,
@@ -22,8 +23,8 @@ const exampleComments = [
   },
   {
     id: 3,
-    gameName: 'Call of Duty: Modern Warfare III',
-    imgGame:
+    commentName: 'Call of Duty: Modern Warfare III',
+    commentImg:
       'https://cdn-products.eneba.com/resized-products/SLVSqluiQW4bQAMgb1_-5npM22TIVGi4-f80BB_sfPc_350x200_2x-0.jpg',
     comment: 'Great graphics in this game.',
     gameRating: 3,
@@ -31,7 +32,7 @@ const exampleComments = [
   },
 ];
 
-export function Comments({ comments = [] }) {
+export function Comments({ comments = [], displayAddress = false }) {
   return (
     <div className={styles.commentsContainer}>
       {comments.map((comment) => (
@@ -39,7 +40,7 @@ export function Comments({ comments = [] }) {
           <img src={comment.game.image} alt={comment.game.name} />
           <div>
             <div className={styles.gamenameRatingContainer}>
-              <h4>{comment.game.name}</h4>
+              <h4>{displayAddress ? comment.author : comment.game.name}</h4>
               <div className={styles.starRating}>
                 {Array.from({ length: 5 }, (_, index) => (
                   <span

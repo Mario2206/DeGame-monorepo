@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './NFT.module.css';
 import { NftGame } from '../../util/types';
-import { Event } from 'ethers';
+import { hasGame, mintNft } from '../../util/contracts/gameCollection';
 import Link from 'next/link';
-import {
-  getGameCollectionContract,
-  hasGame,
-  mintNft,
-} from '../../util/contracts/gameCollection';
 
 type Props = {
   nft: NftGame;
@@ -26,7 +21,8 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
   const onClick = async () => {
     if (!playable) {
       setIsLoading(true);
-      await mintNft(nft.id, nft.price).catch(() => {
+      await mintNft(nft.id, nft.price).finally(async () => {
+        await checkIfPlayable();
         setIsLoading(false);
       });
     }
@@ -36,25 +32,15 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
     checkIfPlayable();
   }, [nft]);
 
-  useEffect(() => {
-    const { contract } = getGameCollectionContract();
-    const onMinted = (event: Event) => {
-      checkIfPlayable();
-      setIsLoading(false);
-    };
-    contract.on('Minted', onMinted);
-    return () => {
-      contract.removeListener('Minted', onMinted);
-    };
-  }, []);
-
   return (
     <>
-      <img
-        src={nft.metadata.image || ''}
-        className={styles.nftImage}
-        style={{ height: '200px' }}
-      />
+      <Link href={`/game/${nft.contract}/${nft.id}`}>
+        <img
+          src={nft.metadata.image || ''}
+          className={styles.nftImage}
+          style={{ height: '200px' }}
+        />
+      </Link>
       <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
       <p className={styles.nftName}>{nft.metadata.name}</p>
       {displayPrice && (
