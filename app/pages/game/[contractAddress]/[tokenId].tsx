@@ -23,36 +23,6 @@ const exampleGame = {
   gamePublisher: 'Ubisoft',
 };
 
-const parentComponentComments = [
-  {
-    id: 1,
-    commentName: 'Jonathan',
-    commentImg:
-      'https://pitch-assets.imgix.net/0b9fdfb7-6a4c-44fa-a54c-a688affc0ba5?pitch-bytes=124295&pitch-content-type=image%2Fpng&w=2000&h=2000&fit=max&auto=format&q=100',
-    comment: 'I love playing this game!',
-    gameRating: 5,
-    time: '1 day ago',
-  },
-  {
-    id: 2,
-    commentName: 'Thomas',
-    commentImg:
-      'https://pitch-assets.imgix.net/d96095de-2fef-400c-ad3e-467126102e40?pitch-bytes=326193&pitch-content-type=image%2Fpng&w=2000&h=2000&fit=max&auto=format&q=100',
-    comment: 'This game is awesome',
-    gameRating: 4.5,
-    time: '2 hours ago',
-  },
-  {
-    id: 3,
-    commentName: 'Adil',
-    commentImg:
-      'https://pitch-assets.imgix.net/9d8ccedc-a7cc-4a81-82be-ad5fa3cb1143?pitch-bytes=242410&pitch-content-type=image%2Fpng&w=2000&h=2000&fit=max&auto=format&q=100',
-    comment: 'Great graphics in this game.',
-    gameRating: 3,
-    time: '3 days ago',
-  },
-];
-
 const GamePageDetails = () => {
   const router = useRouter();
 
@@ -77,16 +47,16 @@ const GamePageDetails = () => {
       setError(!result);
     });
   };
-
   const handleBuyGame = async () => {
     if (!playable) {
       setLoadingPayment(true);
       if (nft?.id !== undefined && nft?.price !== undefined) {
-        await mintNft(nft.id, nft.price).catch(() => {
-          console.log('Error minting NFT');
-        });
+        await mintNft(nft.id, nft.price)
+          .catch((e) => {
+            alert(e.message);
+          })
+          .finally(() => setLoadingPayment(false));
         await checkIfPlayable();
-        setLoadingPayment(false);
       }
     }
   };

@@ -2,12 +2,12 @@
   margin-top: 8rem;
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: stretch;
   gap: 1rem;
 }
 
 .gamePageDetailsLeft img {
-  width: 700px;
+  width: 550px;
   min-height: 500px;
   max-height: 100%;
   object-fit: cover;
@@ -32,6 +32,7 @@
 @media screen and (max-width: 768px) {
   .gamePageDetailsContainer {
     flex-direction: column;
+    align-items: stretch;
     gap: 2rem;
   }
 
