@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
-import { id } from 'ethers/lib/utils';
 import gameComments from '../../../artifacts/contracts/gameComments.sol/gameComments.json';
 import { COMMENTS_CONTRACT_ADDRESS } from '../../const/contractAddresses';
+import { Comment } from '../types';
+import { getAllMintableNfts } from './gameCollection';
 
 const BADGE_MANAGER_ABI = gameComments.abi;
 
@@ -19,25 +20,53 @@ export function getGameCommentsContract() {
 export async function getOwnedComments() {
   const { contract } = getGameCommentsContract();
 
-  const commentIds = await contract.getAllOwnedCommentsId();
+  const result = await contract.getAllOwnedComments();
 
-  const comments = [];
+  const comments: Comment[] = [];
 
-  for (let i = 0; i < commentIds.length; i++) {
-    const commentId = commentIds[i];
-    const comment = await contract.getComment(commentId);
+  const nfts = await getAllMintableNfts();
+
+  for (let i = 0; i < result.length; i++) {
+    const obj = result[i];
+
+    const gameId = obj[1].toNumber();
+    const nft = nfts.find((nft) => nft.id === gameId);
+
+    if (!nft) continue;
 
     comments.push({
-      id: comment[0],
-      author: comment[1],
-      content: comment[2],
-      timestamp: comment[3],
+      id: obj[0].toNumber(),
+      game: nft,
+      rating: obj[2],
+      author: obj[3],
+      content: obj[4],
+      timestamp: obj[5].toNumber(),
     });
   }
+
   return comments;
 }
 
-export async function addComment(content: String) {
-  const { contract } = getGameCommentsContract();
-  await contract.addComment(content);
+export async function addComment(
+  gameId: number,
+  content: String,
+  rating: number
+) {
+  try {
+    const { contract } = getGameCommentsContract();
+    const tx = await contract.addComment(gameId, content, rating);
+
+    const receipt = await tx.wait();
+
+    return receipt.status;
+  } catch (err) {
+    return false;
+  }
+}
+
+export async function hasGameComment(gameId: number) {
+  const ownedComments = await getOwnedComments();
+  return ownedComments.find((comment) => comment.game.id === gameId)
+    ? true
+    : false;
 }

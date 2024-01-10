@@ -9,6 +9,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract GameComments is ERC1155, Ownable {
     struct Comment {
         uint256 id;
+        uint256 gameId;
+        uint256 rating;
         address author;
         string content;
         uint256 timestamp;
@@ -26,12 +28,28 @@ contract GameComments is ERC1155, Ownable {
         metadataURI = "";
     }
 
-    function addComment(string memory _content) public returns (uint256) {
+    function addComment(
+        uint256 _gameId,
+        string memory _content,
+        uint256 _rating
+    ) public returns (uint256) {
         require(bytes(_content).length > 0, "Comment content cannot be empty.");
-        idCounter++;
 
+        // Vérifier si l'utilisateur possède déjà un commentaire avec le même gameId
+        for (uint256 i = 1; i <= idCounter; i++) {
+            if (
+                comments[i].author == msg.sender &&
+                comments[i].gameId == _gameId
+            ) {
+                revert("User already has a comment for this gameId.");
+            }
+        }
+
+        idCounter++;
         comments[idCounter] = Comment(
             idCounter,
+            _gameId,
+            _rating,
             msg.sender,
             _content,
             block.timestamp
@@ -43,29 +61,52 @@ contract GameComments is ERC1155, Ownable {
 
     function getComment(
         uint256 _commentId
-    ) public view returns (uint256, address, string memory, uint256) {
+    )
+        public
+        view
+        returns (uint256, uint256, uint256, address, string memory, uint256)
+    {
         require(_commentId < idCounter, "This comment does not exist.");
 
         Comment storage comment = comments[_commentId];
-        return (comment.id, comment.author, comment.content, comment.timestamp);
+        return (
+            comment.id,
+            comment.gameId,
+            comment.rating,
+            comment.author,
+            comment.content,
+            comment.timestamp
+        );
     }
 
-    function getAllOwnedCommentsId() public view returns (uint256[] memory) {
-        uint256[] memory ownerComments = new uint256[](idCounter);
-        uint256 count = 0;
+    function getAllComments() public view returns (Comment[] memory) {
+        Comment[] memory allComments = new Comment[](idCounter);
 
         for (uint256 i = 1; i <= idCounter; i++) {
-            if (comments[i].author == msg.sender) {
-                ownerComments[count] = comments[i].id;
+            if (comments[i].id != 0) {
+                allComments[i - 1] = comments[i];
+            }
+        }
+
+        return allComments;
+    }
+
+    function getAllOwnedComments() public view returns (Comment[] memory) {
+        Comment[] memory allComments = getAllComments();
+        Comment[] memory ownerComments = new Comment[](allComments.length);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < allComments.length; i++) {
+            if (allComments[i].author == msg.sender) {
+                ownerComments[count] = allComments[i];
                 count++;
             }
         }
 
-        uint256[] memory result = new uint256[](count);
-        for (uint256 i = 0; i < count; i++) {
-            result[i] = ownerComments[i];
+        assembly {
+            mstore(ownerComments, count)
         }
 
-        return result;
+        return ownerComments;
     }
 }

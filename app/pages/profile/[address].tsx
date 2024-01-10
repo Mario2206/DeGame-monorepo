@@ -26,6 +26,7 @@ export default function ProfilePage() {
   const [tab, setTab] = useState<'games' | 'comments'>('games');
   const [isLoading, setIsLoading] = useState(true);
   const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
+  const [ownedComments, setOwnedComments] = useState<Comment[]>([]);
 
   const checkIfOwned = async (nft: NftGame) => {
     const owned = await hasGame(nft.id);
@@ -44,12 +45,17 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    getOwnedComments();
+    // Get owned NFTS
     getAllMintableNfts()
       .then((nfts) => getOwnedNfts(nfts).then((data) => setOwnedNfts(data)))
       .finally(() => {
         setIsLoading(false);
       });
+
+    // Get owned Comments
+    getOwnedComments().then((comments) => {
+      setOwnedComments(comments);
+    });
   }, []);
 
   return (
@@ -114,7 +120,7 @@ export default function ProfilePage() {
           tab === 'comments' ? styles.activeTabContent : styles.tabContent
         }`}
       >
-        <Comments />
+        <Comments comments={ownedComments} />
       </div>
     </Container>
   );
