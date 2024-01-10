@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import gameComments from '../../../artifacts/contracts/gameComments.sol/gameComments.json';
+import gameComments from './artifacts/gameComments.sol/gameComments.json';
 import { COMMENTS_CONTRACT_ADDRESS } from '../../const/contractAddresses';
 import { Comment } from '../types';
 import { getAllMintableNfts, getGameById } from './gameCollection';
