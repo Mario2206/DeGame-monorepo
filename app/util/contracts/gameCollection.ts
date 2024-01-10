@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { GAME_CONTRACT_ADDRESS } from '../../const/contractAddresses';
 import { NftGame } from '../types';
-import gameCollection from '../../../artifacts/contracts/GameCollection.sol/GameCollection.json';
+import gameCollection from './artifacts/GameCollection.sol/GameCollection.json';
 
 const GAME_COLLECTION_ABI = gameCollection.abi;
 
