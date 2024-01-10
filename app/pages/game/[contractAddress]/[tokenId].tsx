@@ -16,6 +16,7 @@ import {
   getGameComments,
   hasGameComment,
 } from '../../../util/contracts/gameComments';
+import { Comment } from '../../../util/types';
 
 const exampleGame = {
   gameReleaseDate: '10 Dec 2021',
@@ -41,7 +42,7 @@ const GamePageDetails = () => {
     event.preventDefault();
 
     setLoadingSubmitComment(true);
-    addComment(nft.id, comment, rating).then((result) => {
+    addComment(nft?.id || "", comment, rating).then((result) => {
       setLoadingSubmitComment(false);
       setHasSubmitted(result);
       setError(!result);

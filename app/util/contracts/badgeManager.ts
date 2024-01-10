@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import badgeManager from "../../../artifacts/contracts/badgeManager.sol/badgeManager.json";
+import badgeManager from "./artifacts/BadgeManager.sol/BadgeManager.json";
 import { BADGE_MANAGER_CONTRACT_ADDRESS } from "../../const/contractAddresses";
 import { NftBadge } from "../types";
 

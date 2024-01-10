@@ -68,7 +68,7 @@ contract GameComments is ERC1155, Ownable, BadgeCaller {
         view
         returns (uint256, uint256, uint256, address, string memory, uint256)
     {
-        require(_commentId < idCounter, "This comment does not exist.");
+        require(_commentId <= idCounter, "This comment does not exist.");
 
         Comment storage comment = comments[_commentId];
         return (

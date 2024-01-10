@@ -15,9 +15,9 @@ import {
 } from '../../util/contracts/gameCollection';
 import { makeFirstLetterUppercase } from '../../util/text';
 import { getMyBadges } from '../../util/contracts/badgeManager';
-import { Badge } from '../../components/Badge/Badge';
 import { BadgeList } from '../../components/Badge/BadgeList';
 import { getOwnedComments } from '../../util/contracts/gameComments';
+import {Comment} from "../../util/types";
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -35,7 +35,7 @@ export default function ProfilePage() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
-  const [ownedComments, setOwnedComments] = useState<NftGame[]>([]);
+  const [ownedComments, setOwnedComments] = useState<Comment[]>([]);
   const [myBadges, setMyBadges] = useState<NftBadge[]>([]);
 
   useEffect(() => {

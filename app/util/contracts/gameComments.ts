@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import gameComments from '../../../artifacts/contracts/gameComments.sol/gameComments.json';
+import gameComments from './artifacts/GameComments.sol/GameComments.json';
 import { COMMENTS_CONTRACT_ADDRESS } from '../../const/contractAddresses';
 import { Comment } from '../types';
 import { getAllMintableNfts, getGameById } from './gameCollection';
@@ -75,7 +75,7 @@ export async function getGameComments(gameId: number) {
 }
 
 export async function addComment(
-  gameId: number,
+  gameId: number | string,
   content: String,
   rating: number
 ) {
