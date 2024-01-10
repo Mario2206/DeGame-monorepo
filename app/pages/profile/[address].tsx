@@ -4,12 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Container from '../../components/Container/Container';
 import NFTGrid from '../../components/NFT/NFTGrid';
 import Skeleton from '../../components/Skeleton/Skeleton';
-import { NFT_COLLECTION_ADDRESS } from '../../const/contractAddresses';
 import styles from '../../styles/Profile.module.css';
 import randomColor from '../../util/randomColor';
 import { NftGame } from '../../util/types';
-import { getAllMintableNfts, hasGame } from '../../util/wallet';
 import { Comments } from '../../components/Comments/Comments';
+import {
+  getAllMintableNfts,
+  hasGame,
+} from '../../util/contracts/gameCollection';
+import { getOwnedComments } from '../../util/contracts/gameComments';
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -41,6 +44,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
+    getOwnedComments();
     getAllMintableNfts()
       .then((nfts) => getOwnedNfts(nfts).then((data) => setOwnedNfts(data)))
       .finally(() => {

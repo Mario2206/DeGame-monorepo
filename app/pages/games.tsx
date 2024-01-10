@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
 import NFTGrid from '../components/NFT/NFTGrid';
-import { getAllMintableNfts } from '../util/wallet';
+import { getAllMintableNfts } from '../util/contracts/gameCollection';
 import { NftGame } from '../util/types';
 
 export default function Buy() {

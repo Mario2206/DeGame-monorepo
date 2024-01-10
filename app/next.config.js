@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   basePath: '',
   env: {
-    NFT_CONTRACT_ADDRESS: process.env.NFT_CONTRACT_ADDRESS,
-    COMMENTS_CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+    GAME_CONTRACT_ADDRESS: process.env.GAME_CONTRACT_ADDRESS,
+    COMMENTS_CONTRACT_ADDRESS: process.env.COMMENTS_CONTRACT_ADDRESS,
   },
 };
 

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styles from './NFT.module.css';
 import { NftGame } from '../../util/types';
-import { getContract, hasGame, mintNft } from '../../util/wallet';
 import { Event } from 'ethers';
 import Link from 'next/link';
+import {
+  getGameCollectionContract,
+  hasGame,
+  mintNft,
+} from '../../util/contracts/gameCollection';
 
 type Props = {
   nft: NftGame;
@@ -33,7 +37,7 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
   }, [nft]);
 
   useEffect(() => {
-    const { contract } = getContract();
+    const { contract } = getGameCollectionContract();
     const onMinted = (event: Event) => {
       console.log({ event });
       checkIfPlayable();
