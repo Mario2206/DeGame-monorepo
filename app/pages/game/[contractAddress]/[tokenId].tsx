@@ -153,9 +153,14 @@ const GamePageDetails = () => {
       </div>
 
       <div className="">
-        <p>Most helpful reviews: </p>
-
-        <Comments comments={gameComments} displayAddress={true} />
+        {gameComments && gameComments.length > 0 ? (
+          <>
+            <p>Most helpful reviews: </p>
+            <Comments comments={gameComments} displayAddress={true} />
+          </>
+        ) : (
+          <p>No comments for this game.</p>
+        )}
 
         {playable ? (
           hasComment ? (
