@@ -52,7 +52,7 @@ export default function TokenPage() {
     event.preventDefault();
 
     setLoading(true);
-    addComment(nft.id, comment, rating).then((result) => {
+    addComment(nft?.id || "", comment, rating).then((result) => {
       setLoading(false);
       setHasSubmitted(result);
       setError(!result);

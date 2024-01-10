@@ -75,7 +75,7 @@ export async function getGameComments(gameId: number) {
 }
 
 export async function addComment(
-  gameId: number,
+  gameId: number | string,
   content: String,
   rating: number
 ) {
