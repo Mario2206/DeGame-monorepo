@@ -17,7 +17,7 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
 	const checkIfPlayable = async () => {
 		const playable = await hasGame(nft.id);
 		setPlayable(playable);
-		
+
 		if(playable) // TODO: badge for first game
 		toast.success('Congratulations! You have gained a badge for your first game!');
 	};
