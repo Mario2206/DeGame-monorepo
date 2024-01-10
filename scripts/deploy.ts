@@ -10,8 +10,24 @@ async function deployGameCollection() {
   await gameCollection.registerGame(ethers.parseEther(game1Price), 10);
   await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
 
+  await gameCollection.registerGame(ethers.parseEther(game1Price), 10);
+  await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+  await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+  await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+  await gameCollection.registerGame(ethers.parseEther(game2Price), 10);
+
   console.log(`Game contract deployed to ${gameCollection.target}`);
   return gameCollection;
+}
+
+async function deployBadgeManager() {
+  const badgeManager = await ethers.deployContract('BadgeManager');
+  await badgeManager.waitForDeployment();
+
+  await badgeManager.registerBadge();
+
+  console.log(`BadgeManager contract deployed to ${badgeManager.target}`);
+  return badgeManager;
 }
 
 async function deployGameComments() {
@@ -25,7 +41,15 @@ async function deployGameComments() {
 async function main() {
   const gameCollection = await deployGameCollection();
 
-  const gameComments = await deployGameComments();
+  const badgeManager = await deployBadgeManager();
+
+  const commentsManager = await deployGameComments();
+
+  // Allow the GameCollection contract to mint badges
+  await badgeManager.setAllowedContract(gameCollection.target, true);
+
+  // Set the BadgeManager contract on the GameCollection contract so it can interact with the deployed BadgeManager
+  await gameCollection.setBadgeManager(badgeManager.target);
 }
 
 main().catch((error) => {

@@ -6,12 +6,17 @@ import NFTGrid from '../../components/NFT/NFTGrid';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import styles from '../../styles/Profile.module.css';
 import randomColor from '../../util/randomColor';
-import { NftGame } from '../../util/types';
+import { NftBadge, NftGame } from '../../util/types';
 import { Comments } from '../../components/Comments/Comments';
 import {
   getAllMintableNfts,
+  getOwnedNfts,
   hasGame,
 } from '../../util/contracts/gameCollection';
+import { makeFirstLetterUppercase } from '../../util/text';
+import { getMyBadges } from '../../util/contracts/badgeManager';
+import { Badge } from '../../components/Badge/Badge';
+import { BadgeList } from '../../components/Badge/BadgeList';
 import { getOwnedComments } from '../../util/contracts/gameComments';
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
@@ -21,28 +26,26 @@ const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
 ];
 
+const tabs = ['games', 'comments', 'badges'] as const;
+
 export default function ProfilePage() {
   const router = useRouter();
-  const [tab, setTab] = useState<'games' | 'comments'>('games');
+  const [activeTab, setActiveTab] = useState<'games' | 'comments' | 'badges'>(
+    'games'
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [ownedNfts, setOwnedNfts] = useState<NftGame[]>([]);
-  const [ownedComments, setOwnedComments] = useState<Comment[]>([]);
+  const [ownedComments, setOwnedComments] = useState<NftGame[]>([]);
+  const [myBadges, setMyBadges] = useState<NftBadge[]>([]);
 
-  const checkIfOwned = async (nft: NftGame) => {
-    const owned = await hasGame(nft.id);
-    return owned;
-  };
-
-  const getOwnedNfts = async (nfts: NftGame[]) => {
-    const array = [];
-    for (let i = 0; i < nfts.length; i++) {
-      const nft = nfts[i];
-      const isOwned = await checkIfOwned(nft);
-      if (isOwned) array.push(nft);
-    }
-
-    return array;
-  };
+  useEffect(() => {
+    getAllMintableNfts()
+      .then(getOwnedNfts)
+      .then((data) => setOwnedNfts(data))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   useEffect(() => {
     // Get owned NFTS
@@ -55,6 +58,11 @@ export default function ProfilePage() {
     // Get owned Comments
     getOwnedComments().then((comments) => {
       setOwnedComments(comments);
+    });
+
+    getMyBadges().then((data) => {
+      console.log({ data });
+      setMyBadges(data);
     });
   }, []);
 
@@ -85,26 +93,21 @@ export default function ProfilePage() {
       </div>
 
       <div className={styles.tabs}>
-        <h3
-          className={`${styles.tab} 
-        ${tab === 'games' ? styles.activeTab : ''}`}
-          onClick={() => setTab('games')}
-        >
-          Games
-        </h3>
-
-        <h3
-          className={`${styles.tab}
-        ${tab === 'comments' ? styles.activeTab : ''}`}
-          onClick={() => setTab('comments')}
-        >
-          Comments
-        </h3>
+        {tabs.map((tab) => (
+          <h3
+            key={tab}
+            className={`${styles.tab} 
+        ${activeTab === tab ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {makeFirstLetterUppercase(tab)}
+          </h3>
+        ))}
       </div>
 
       <div
         className={`${
-          tab === 'games' ? styles.activeTabContent : styles.tabContent
+          activeTab === 'games' ? styles.activeTabContent : styles.tabContent
         }`}
       >
         <NFTGrid
@@ -117,10 +120,17 @@ export default function ProfilePage() {
 
       <div
         className={`${
-          tab === 'comments' ? styles.activeTabContent : styles.tabContent
+          activeTab === 'comments' ? styles.activeTabContent : styles.tabContent
         }`}
       >
         <Comments comments={ownedComments} />
+      </div>
+      <div
+        className={`${
+          activeTab === 'badges' ? styles.activeTabContent : styles.tabContent
+        }`}
+      >
+        <BadgeList badges={myBadges} />
       </div>
     </Container>
   );

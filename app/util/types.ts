@@ -18,3 +18,10 @@ export type Comment = {
   content: string;
   timestamp: number;
 };
+
+export type NftBadge = {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+};

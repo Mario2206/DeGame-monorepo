@@ -13,3 +13,6 @@ export const GAME_CONTRACT_ADDRESS = process.env.GAME_CONTRACT_ADDRESS || '';
 
 export const COMMENTS_CONTRACT_ADDRESS =
   process.env.COMMENTS_CONTRACT_ADDRESS || '';
+
+export const BADGE_MANAGER_CONTRACT_ADDRESS =
+  process.env.BADGE_MANAGER_CONTRACT_ADDRESS || '';

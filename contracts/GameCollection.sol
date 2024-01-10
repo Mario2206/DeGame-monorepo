@@ -3,11 +3,11 @@ pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./BadgeCaller.sol";
 
 /// @custom:security-contact <security email address>
-contract GameCollection is ERC1155, IERC2981, Ownable {
+contract GameCollection is ERC1155, IERC2981, BadgeCaller {
     using Strings for uint256;
 
     uint256 public idCounter;
@@ -24,7 +24,7 @@ contract GameCollection is ERC1155, IERC2981, Ownable {
     );
     event Minted(uint256 indexed gameId, address indexed to);
 
-    constructor() ERC1155("") Ownable(msg.sender) {
+    constructor() ERC1155("") BadgeCaller() {
         metadataURI = "https://scarlet-late-turtle-674.mypinata.cloud/ipfs/QmRq9JkTQjn9jzVm8un3UQwUqMo6U18hZQKxLJszVnufuQ/";
     }
 
@@ -48,6 +48,8 @@ contract GameCollection is ERC1155, IERC2981, Ownable {
         require(msg.value >= gamePrice, "Invalid price");
         _mint(msg.sender, gameId, 1, "");
         emit Minted(gameId, msg.sender);
+        // Assign the badge to the user
+        assignBadge(msg.sender, 1);
     }
 
     // Withdraw the funds
@@ -102,5 +104,9 @@ contract GameCollection is ERC1155, IERC2981, Ownable {
         string
             memory json = '{"name": "DeGames collection","description":"Own your games. Play and sell as you wish with no limit."}';
         return string.concat("data:application/json;utf8,", json);
+    }
+
+    fallback() external {
+        revert();
     }
 }
