@@ -4,8 +4,8 @@ async function deployGameCollection() {
   const gameCollection = await ethers.deployContract('GameCollection');
   await gameCollection.waitForDeployment();
 
-  const game1Price = '1';
-  const game2Price = '2';
+  const game1Price = '0.001';
+  const game2Price = '0.002';
 
   await gameCollection.registerGame(ethers.parseEther(game1Price), 10);
   await gameCollection.registerGame(ethers.parseEther(game2Price), 10);

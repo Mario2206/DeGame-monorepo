@@ -40,3 +40,8 @@ export async function getMyBadges() {
 	})
 	.filter((badge) => badge !== undefined) as NftBadge[];
 }
+
+
+export const getBadgeMetadata = (id: number) => {
+	return badgeMetadata.find((badge) => badge.id == id);
+}
