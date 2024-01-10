@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"scripts": {
 		"start-node": "npx hardhat node",
-    "deploy": "npx hardhat run --network localhost scripts/deploy.ts",
+		"deploy": "npx hardhat run --network localhost scripts/deploy.ts",
+		"deploy:sepolia": "npx hardhat run --network sepolia scripts/deploy.ts",
 		"compile": "npx hardhat compile",
 		"test": "npx hardhat test"
 	},
@@ -21,6 +22,7 @@
 		"@types/mocha": ">=9.1.0",
 		"@types/node": ">=16.0.0",
 		"chai": "^4.2.0",
+		"dotenv": "^16.3.1",
 		"ethers": "^6.4.0",
 		"hardhat": "^2.19.1",
 		"hardhat-gas-reporter": "^1.0.8",
