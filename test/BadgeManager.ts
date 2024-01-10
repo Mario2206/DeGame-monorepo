@@ -70,7 +70,7 @@ describe("BadgeManager", function () {
 			).to.be.revertedWith("The address isn't allowed to mint");
 		});
 
-		it("should assign if the sender is allowed and the badge exists", async function () {
+		it("should mint the badge if the sender is allowed and the badge exists", async function () {
 			const { badgeManager, addr1 } = await loadFixture(deployBadgeManager);
 			await badgeManager.registerBadge();
 			await badgeManager.setAllowedContract(addr1.address, true);
@@ -86,7 +86,24 @@ describe("BadgeManager", function () {
 			expect(await badgeManager.connect(addr1).getMyBadges()).to.deep.equal([
 				1,
 			]);
+			expect(await badgeManager.connect(addr1).balanceOf(addr1.address, 1)).to.equal(1)
 		});
+
+		it("shouldn't mint the badge if the address already has it", async function () {
+			const { badgeManager, addr1 } = await loadFixture(deployBadgeManager);
+			await badgeManager.registerBadge();
+			await badgeManager.setAllowedContract(addr1.address, true);
+			await badgeManager.connect(addr1).assign(addr1.address, 1);
+
+			await expect(badgeManager.connect(addr1).assign(addr1.address, 1)).not.to.emit(
+				badgeManager,
+				"BadgeMinted"
+			);
+			expect(
+				await badgeManager.connect(addr1).balanceOf(addr1.address, 1)
+			).to.equal(1);
+			expect(await badgeManager.connect(addr1).getMyBadges()).to.deep.equal([1]);
+		})
 	});
 
 	describe("MetadataUri", function () {
