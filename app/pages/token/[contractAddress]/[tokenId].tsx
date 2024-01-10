@@ -1,36 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from 'react-hot-toast';
 import Container from "../../../components/Container/Container";
 import { NftGame } from "../../../util/types";
 import styles from "../../../styles/Token.module.css";
 import { getAllMintableNfts } from "../../../util/contracts/gameCollection";
 import { CommentForm } from "../../../components/CommentForm/CommentForm";
-
-export interface StarRatingProps {
-	rating: number;
-	setRating: (rating: number) => void;
-	editable: boolean;
-}
-export const StarRating: React.FC<StarRatingProps> = ({
-	rating,
-	setRating,
-	editable,
-}) => {
-	return (
-		<div className={styles.starRating}>
-			{Array.from({ length: 5 }, (_, index) => (
-				<span
-					key={index}
-					className={rating > index ? styles.star : ""}
-					onClick={() => editable && setRating(index + 1)}
-				>
-					{rating > index ? "★" : "☆"}
-				</span>
-			))}
-		</div>
-	);
-};
 
 export default function TokenPage() {
 	const router = useRouter();
@@ -44,6 +19,9 @@ export default function TokenPage() {
 	const handleCommentSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setHasSubmitted(true);
+
+		// TODO: badge for new comment
+		toast.success('Congratulations! You have gained a badge for your first comment!');
 	};
 
 	useEffect(() => {
@@ -63,7 +41,6 @@ export default function TokenPage() {
 
 	return (
 		<>
-			<Toaster position="bottom-center" reverseOrder={false} />
 			<Container maxWidth="lg">
 				<div className={styles.container}>
 					<div className={styles.containerGame}>
@@ -85,6 +62,7 @@ export default function TokenPage() {
 					</div>
 				</div>
 			</Container>
+			<Toaster position="bottom-center" reverseOrder={false} toastOptions={{ duration: 4000 }} />
 		</>
 	);
 }

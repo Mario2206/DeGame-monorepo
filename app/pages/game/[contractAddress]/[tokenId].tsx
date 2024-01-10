@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import toast, { Toaster } from 'react-hot-toast';
 import { NftGame } from "../../../util/types";
 import Container from "../../../components/Container/Container";
 import styles from "./styles.module.css";
@@ -62,6 +63,9 @@ const GamePageDetails = () => {
 		event.preventDefault();
 		console.log("comment: ", comment);
 		setHasSubmitted(true);
+
+		// TODO: badge for new comment
+		toast.success('Congratulations! You have gained a badge for your first comment!');
 	};
 
 	const handleBuyGame = async () => {
@@ -79,8 +83,11 @@ const GamePageDetails = () => {
 	const checkIfPlayable = async () => {
 		if (nft && nft.id !== undefined) {
 			const playable = await hasGame(nft.id);
-			console.log("playable nft", playable, nft);
 			setPlayable(playable);
+
+			if(playable) {
+				toast.success('Congratulations! You have gained a badge for your first game!');
+			}
 		}
 	};
 
@@ -153,8 +160,7 @@ const GamePageDetails = () => {
 					</div>
 				</div>
 			</div>
-
-			<div className="">
+			<div>
 				<p>Most helpful reviews: </p>
 
 				<Comments comments={parentComponentComments} />
@@ -170,6 +176,7 @@ const GamePageDetails = () => {
 					/>
 				</div>
 			</div>
+			<Toaster position="bottom-center" reverseOrder={false} toastOptions={{ duration: 4000 }} />
 		</Container>
 	);
 };

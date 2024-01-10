@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import styles from "./NFT.module.css";
 import { NftGame } from "../../util/types";
 import { hasGame, mintNft } from "../../util/contracts/gameCollection";
@@ -16,6 +17,9 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
 	const checkIfPlayable = async () => {
 		const playable = await hasGame(nft.id);
 		setPlayable(playable);
+		
+		if(playable) // TODO: badge for first game
+		toast.success('Congratulations! You have gained a badge for your first game!');
 	};
 
 	const onClick = async () => {

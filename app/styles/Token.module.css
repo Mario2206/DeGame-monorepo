@@ -301,10 +301,11 @@
   max-width: 800px;
   margin: 1rem auto;
   padding: 20px;
-  background-color: #2c2f33;
+  background-color: #0E0E10;
   color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #262527;
 }
 
 .gameInfo {
@@ -358,8 +359,7 @@
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 4px;
-  border: 1px solid #ffffff50;
-  background-color: #2c2f33;
+  border: 1px solid #7289da;
   color: #ffffff;
   font-family: inherit;
 }

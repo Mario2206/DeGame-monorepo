@@ -28,7 +28,6 @@ export async function mintNft(gameId: number, price: string) {
 }
 
 export async function hasGame(tokenId: number) {
-	console.log("hasGame", tokenId);
 	const { contract, signer } = getGameCollectionContract();
 	const res = await contract.balanceOf(await signer.getAddress(), tokenId);
 	const value = Number(res);

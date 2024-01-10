@@ -9,8 +9,6 @@ export default function Buy() {
   const [nfts, setNfts] = useState<NftGame[]>([]);
 
   useEffect(() => {
-    // mintNft();
-    // hasGame();
     getAllMintableNfts()
       .then((nfts) => {
         setNfts(nfts);
