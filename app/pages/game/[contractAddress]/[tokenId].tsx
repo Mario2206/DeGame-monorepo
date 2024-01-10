@@ -68,9 +68,11 @@ const GamePageDetails = () => {
 		if (!playable) {
 			setIsLoading(true);
 			if (nft?.id !== undefined && nft?.price !== undefined) {
-				await mintNft(nft.id, nft.price).catch(() => {
-					console.log("Error minting NFT");
-				});
+				await mintNft(nft.id, nft.price)
+				.catch((e) => {
+					alert(e.message);
+				})
+				.finally(() => setIsLoading(false))
 				await checkIfPlayable();
 			}
 		}

@@ -21,7 +21,11 @@ export default function NFTComponent({ nft, displayPrice = true }: Props) {
 	const onClick = async () => {
 		if (!playable) {
 			setIsLoading(true);
-			await mintNft(nft.id, nft.price).finally(async () => {
+			await mintNft(nft.id, nft.price)
+			.catch(e => {
+				alert(e.message);
+			})
+			.finally(async () => {
 				await checkIfPlayable();
 				setIsLoading(false);
 			});
