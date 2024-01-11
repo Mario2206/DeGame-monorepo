@@ -20,6 +20,13 @@ export default function Buy() {
   }, [address, connectionStatus])
   
   useEffect(() => {
+    console.log('address', address);
+    if(!address) {
+      setNfts([])
+      setIsLoading(false)
+      return
+    };
+    setIsLoading(true);
     getAllMintableNfts()
       .then((nfts) => {
         setNfts(nfts);
@@ -27,7 +34,8 @@ export default function Buy() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [address]);
+
   return (
     <Container maxWidth="lg">
       <h1>Games</h1>
