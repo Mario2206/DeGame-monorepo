@@ -13,7 +13,6 @@ export default function Buy() {
 
   const address = useAddress();
   const connectionStatus = useConnectionStatus();
-  console.log('connectionStatus', connectionStatus);
 
   useEffect(() => {
     if(!address && connectionStatus === "disconnected" || !address && connectionStatus === "connected") setShowModal(true);
