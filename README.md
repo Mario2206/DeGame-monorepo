@@ -41,6 +41,17 @@ Go to `Add Network` > `Add network manually` and input the following form:
 
 You can have more info [here](https://docs.metamask.io/wallet/how-to/get-started-building/run-devnet/).
 
-## How to deploy the smart contracts to a real network? 
+## How to deploy the smart contracts to Sepolia network? 
 
-TODO 
+```
+yarn deploy:sepolia
+```
+
+## Smart contract deployed
+
+### Sepolia 
+
+Game contract deployed to `0x2514Ac1cd8D974Ceb4d265E2E2CdE47Ed7354203`
+BadgeManager contract deployed to `0x9e7A1785d3E0afa709EFAbE44F555c28D5605361`
+GameComments contract deployed to `0xA98C400BfC3052490440a2751868a45c007Eeaff`
+
