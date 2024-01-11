@@ -1,18 +1,23 @@
 import type { AppProps } from "next/app";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider, useAddress } from "@thirdweb-dev/react";
 import { Navbar } from "../components/Navbar/Navbar";
 import NextNProgress from "nextjs-progressbar";
 import { NETWORK } from "../const/contractAddresses";
 import "../styles/globals.css";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { getBadgeManagerContract, getBadgeMetadata } from "../util/contracts/badgeManager";
+import {
+	getBadgeManagerContract,
+	getBadgeMetadata,
+} from "../util/contracts/badgeManager";
 
-function setupToastListeners() {
+
+function setupToastListeners(address?: string) {
 	const badgeManager = getBadgeManagerContract();
 
-	badgeManager.contract.on("BadgeMinted", (tokenId) => {
-    const badge = getBadgeMetadata(tokenId)
+	badgeManager.contract.on("BadgeMinted", (tokenId, to) => {
+		if (to !== address) return;
+		const badge = getBadgeMetadata(tokenId);
 		toast.success(`Badge ${badge?.name} minted`);
 	});
 
@@ -21,16 +26,23 @@ function setupToastListeners() {
 	};
 }
 
-function MyApp({ Component, pageProps }: AppProps) {
+function Container() {
+	const address = useAddress();
+
 	useEffect(() => {
-		const dispose = setupToastListeners();
+		const dispose = setupToastListeners(address);
 
 		return () => {
 			dispose();
 		};
-	}, []);
+	}, [address]);
+	return null
+}
+
+function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<ThirdwebProvider activeChain={NETWORK}>
+		<ThirdwebProvider  activeChain={NETWORK}>
+			<Container />
 			<Toaster
 				position="bottom-center"
 				reverseOrder={false}
