@@ -65,7 +65,6 @@ const GamePageDetails = () => {
   const checkIfPlayable = async () => {
     if (nft && nft.id !== undefined) {
       const playable = await hasGame(nft.id);
-      console.log('playable nft', playable, nft);
       setPlayable(playable);
     }
   };
